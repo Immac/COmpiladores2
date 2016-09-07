@@ -1,0 +1,4 @@
+bin/
+gen/
+build/
+.kateproject.d/
