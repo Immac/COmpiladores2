@@ -5,6 +5,7 @@
 #include "statement.h"
 #include <string>
 #include <map>
+#include <iostream>
 using namespace std;
 class AssignStatement : public Statement {
 private:
@@ -20,9 +21,8 @@ public:
 	
 	void execute() override {
 		(*symbolTable)[id->getKey()] = e;
+		cout << e->generateCode(); // Generate code test
 	}
-	
-	
 };
 
 #endif // ASSIGN_STATEMENT_H

@@ -1,6 +1,6 @@
-mkdir bin
-mkdir gen
-mkdir build
+mkdir bin -p
+mkdir gen -p
+mkdir build -p
 bison --defines=tokens.h -o gen/expr_parser.cpp src/expr.y
 mv tokens.h gen/tokens.h
 cp src/*.h gen/

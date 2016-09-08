@@ -22,12 +22,13 @@ using namespace std;
 
 int yylex();
 void yyerror(const char *str);
+string newTemp();
 int line;
 map<string,Expression *> symbolTable;
 list<Statement *> statements;
 stack<int> tabStack;
 stack<int> buffer;
-
+int tempCount;
 %}
 %union {
     Expression *expression_t;
@@ -97,6 +98,7 @@ E: E '+' E { $$ = new AddExpression($1, $3); }
 
 int main()
 {
+	tempCount = 1;
   tabStack.push(0);
   yyparse();
   cout << "Execution Start: " << endl;
@@ -109,4 +111,12 @@ int main()
 void yyerror(const char *str)
 {
     cout << str << " line: " << line << endl;
+}
+
+string newTemp(){
+	int tempOffset = tempCount * 4;
+	stringstream ss;
+	ss << "[ebp -" << tempOffset << "]";
+	tempCount++;
+	return ss.str();
 }
