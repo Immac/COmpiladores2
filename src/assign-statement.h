@@ -27,6 +27,8 @@ public:
 		
 		cout << e->generateCode(); // Generate code test
 	}
+	
+	string generateCode() override;
 };
 
 #endif // ASSIGN_STATEMENT_H
