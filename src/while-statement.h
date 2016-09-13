@@ -1,10 +1,13 @@
 #ifndef WHILE_EXPRESSION_H
 #define WHILE_EXPRESSION_H
 
-#include "expression.h"
+#include "statement.h"
+#include <string>
 
-class WhileExpression : public Expression {
-	
+class WhileStatement : public Statement {
+	public:
+		void execute() {}
+		std::string generateCode() override;
 };
 
 #endif //WHILE_EXPRESSION_H
