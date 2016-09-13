@@ -18,7 +18,7 @@ public:
 	elseStatements(elseStatements)
 	{}
 	
-	void execute() override{
+	void execute() override {
 		if(condition->evaluate()) {
 			for(auto statement : ifStatements) {
 				statement->execute();
@@ -30,6 +30,8 @@ public:
 			}
 		}
 	}
+	
+	string generateCode() override;
 };
 
 #endif // IF_STATEMENT
