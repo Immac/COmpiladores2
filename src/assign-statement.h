@@ -3,6 +3,7 @@
 
 #include "expression.h"
 #include "statement.h"
+#include "id-expression.h"
 #include <string>
 #include <map>
 #include <iostream>
