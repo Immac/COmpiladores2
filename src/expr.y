@@ -17,14 +17,18 @@
 #include "assign-statement.h"
 #include "print-statement.h"
 #include "if-statement.h"
+#include "sub-expression.h"
+#include "div-expression.h"
 #define YYERROR_VERBOSE 1
 using namespace std;
 
 int yylex();
 void yyerror(const char *str);
 string newTemp();
+string resolveId();
 int line;
 map<string,Expression *> symbolTable;
+map<string,string> symbolTableGen;
 list<Statement *> statements;
 stack<int> tabStack;
 stack<int> buffer;
@@ -56,8 +60,8 @@ int tempCount;
 %nonassoc '<'
 %nonassoc '>'
 
-%left '+'
-%left '*'
+%left '+' '-'
+%left '*' '/'
 
 %%
 
@@ -71,7 +75,9 @@ S: TK_PRINT '(' E ')'{ $$ = new PrintStatement($3);}
 | TK_ID '=' E {
 	$$ = new AssignStatement($3, 
 							 static_cast<IdExpression*>($1),
-							 &symbolTable);
+							 &symbolTable,
+							 &symbolTableGen
+							);
 	}
 | IF_STATEMENT 
 ;
@@ -84,6 +90,8 @@ ELSE_OPTIONAL: TK_ELSE ':' TK_INDENT LS TK_DEDENT { $$ = $4; }
 ;
 E: E '+' E { $$ = new AddExpression($1, $3); }
   | E '*' E { $$ = new MultiplyExpression($1, $3); }
+  | E '-' E { $$ = new SubExpression($1, $3); }
+  | E '/' E { $$ = new DivExpression($1, $3); }
   | E '<' E { $$ = new LessThanExpression($1, $3); }
   | E '>' E { $$ = new GreaterThanExpression($1, $3); }
   | E TK_LTE E { $$ = new LessOrEqualToExpression($1, $3); }
@@ -99,6 +107,7 @@ E: E '+' E { $$ = new AddExpression($1, $3); }
 int main()
 {
 	tempCount = 1;
+	line = 1;
   tabStack.push(0);
   yyparse();
   cout << "Execution Start: " << endl;
@@ -116,7 +125,16 @@ void yyerror(const char *str)
 string newTemp(){
 	int tempOffset = tempCount * 4;
 	stringstream ss;
-	ss << "[ebp -" << tempOffset << "]";
+	ss << "dword[ebp -" << tempOffset << "]";
 	tempCount++;
 	return ss.str();
+}
+
+string resolveId(string id){
+	if(symbolTableGen.find(id) != symbolTableGen.end()){
+	  return symbolTableGen[id];
+	}
+	string address = newTemp();
+	symbolTableGen[id] = address;
+	return address;
 }

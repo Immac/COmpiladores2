@@ -12,15 +12,19 @@ private:
 	Expression *e;
 	IdExpression *id;
 	map<string,Expression *> *symbolTable;
+	map<string,string> *symbolTableGen;
 public:
 	AssignStatement(Expression *e, 
 					IdExpression *id, 
-					map<string,Expression*> *symbolTable)
-	: e(e), id(id), symbolTable(symbolTable)
+					map<string,Expression*> *symbolTable,
+					map<string,string> *symbolTableGen
+   				)
+	: e(e), id(id), symbolTable(symbolTable), symbolTableGen(symbolTableGen)
 	{}
 	
 	void execute() override {
-		(*symbolTable)[id->getKey()] = e;
+		//(*symbolTable)[id->getKey()] = e;
+		
 		cout << e->generateCode(); // Generate code test
 	}
 };

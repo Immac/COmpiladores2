@@ -18,6 +18,7 @@ using namespace std;
 #include "tokens.h"
 
 extern map<string,Expression *> symbolTable;
+extern map<string,string> symbolTableGen;
 extern int line;
 extern stack<int> tabStack;
 extern stack<int> buffer;
@@ -206,7 +207,7 @@ else { cout << "else" << endl; return TK_ELSE; }
 	cout << "TK_ID" << endl;
 	string key(yytext);
 	yylval.expression_t 
-		= new IdExpression(key,&symbolTable);
+		= new IdExpression(key,&symbolTable,&symbolTableGen);
 	return TK_ID;
 }
 
@@ -218,6 +219,8 @@ else { cout << "else" << endl; return TK_ELSE; }
 ">" { return '>';}
 "+" { return '+'; }
 "*" { return '*'; }
+"-" { return '-'; }
+"/" { return '/'; }
 "(" { cout << "(" << endl; return '('; }
 ")" { cout << ")" << endl; return ')'; }
 "=" { cout << "=" << endl; return '='; }

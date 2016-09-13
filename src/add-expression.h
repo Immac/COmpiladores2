@@ -36,7 +36,6 @@ public:
 		if( this->location.empty() ) {
 			this->location = newTemp();
 		}
-		cout << location << "<<" << endl;
 		return this->location;
 	}
 };

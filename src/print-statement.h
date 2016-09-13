@@ -15,6 +15,8 @@ public:
 	void execute() override { 
 		cout << e->evaluate() << endl; 
 	}
+	
+	void string generateCode();
 };
 
 #endif //PRINT_STATEMENT_H
