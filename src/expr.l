@@ -203,6 +203,7 @@ ID [a-zA-Z][_a-zA-Z0-9]*|[_]+[a-zA-Z0-9][_a-zA-Z0-9]*
 print { cout << "print" ; return TK_PRINT; }
 if { return TK_IF; }
 else { cout << "else" << endl; return TK_ELSE; }
+elif { cout << "elif" << endl; return TK_ELIF; }
 {ID} { 
 	cout << "TK_ID" << endl;
 	string key(yytext);

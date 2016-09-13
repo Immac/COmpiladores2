@@ -33,6 +33,7 @@ list<Statement *> statements;
 stack<int> tabStack;
 stack<int> buffer;
 int tempCount;
+int labelNumber;
 %}
 %union {
     Expression *expression_t;
@@ -45,6 +46,7 @@ int tempCount;
 %token <statement_t> TK_IF
 %token <statement_t> TK_ELSE
 %token <statement_t> TK_PRINT
+%token <statement_t> TK_ELIF
 
 %token TK_INDENT
 %token TK_DEDENT
@@ -86,6 +88,10 @@ IF_STATEMENT: TK_IF E ':' TK_INDENT LS TK_DEDENT ELSE_OPTIONAL {
 }
 ;
 ELSE_OPTIONAL: TK_ELSE ':' TK_INDENT LS TK_DEDENT { $$ = $4; }
+| TK_ELIF E ':' TK_INDENT LS TK_DEDENT ELSE_OPTIONAL { 
+	$$ = new list<Statement*>; 
+	$$->push_back(new IfStatement($2,*$5,*$7));
+}
 | { $$ = new list<Statement *>; }
 ;
 E: E '+' E { $$ = new AddExpression($1, $3); }
@@ -108,6 +114,7 @@ int main()
 {
 	tempCount = 1;
 	line = 1;
+	labelNumber = 1;
   tabStack.push(0);
   yyparse();
   cout << "Execution Start: " << endl;
@@ -137,4 +144,10 @@ string resolveId(string id){
 	string address = newTemp();
 	symbolTableGen[id] = address;
 	return address;
+}
+
+string newLabel(){
+	stringstream ss;
+	ss << "label" << labelNumber++;
+	return ss.str();
 }
