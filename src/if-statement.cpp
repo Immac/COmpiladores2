@@ -19,10 +19,10 @@ string IfStatement::generateCode(){
 	ss << condition->generateCode()
 	<< "cmp " << condition->getLocation() << ", 0" << endl
 	<< "je " << label_else << endl
-	<< ifCode
+	<< ifCode.str() << endl
 	<< "jmp " << label_endif << endl
 	<< label_else << ":" << endl
-	<< elseCode
+	<< elseCode.str() << endl
 	<< label_endif << ":";
 	
 	return ss.str();

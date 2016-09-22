@@ -5,6 +5,7 @@
 #include <list>
 #include <vector>
 #include <stack>
+#include "while-statement.h"
 #include "greater-or-equal-to-expression.h"
 #include "greater-than-expression.h"
 #include "less-than-expression.h"
@@ -24,14 +25,16 @@ using namespace std;
 
 int yylex();
 void yyerror(const char *str);
+void releaseTemp(string location);
 string newTemp();
 string resolveId();
-int line;
 map<string,Expression *> symbolTable;
 map<string,string> symbolTableGen;
 list<Statement *> statements;
 stack<int> tabStack;
 stack<int> buffer;
+stack<string> freeTemporaries;
+int line;
 int tempCount;
 int labelNumber;
 %}
@@ -47,6 +50,7 @@ int labelNumber;
 %token <statement_t> TK_ELSE
 %token <statement_t> TK_PRINT
 %token <statement_t> TK_ELIF
+%token <statement_t> TK_WHILE
 
 %token TK_INDENT
 %token TK_DEDENT
@@ -54,13 +58,10 @@ int labelNumber;
 %type <statement_t> S
 %type <statement_list_t> LS
 %type <statement_t> IF_STATEMENT
+%type <statement_t> WHILE_STATEMENT
 %type <statement_list_t> ELSE_OPTIONAL
 
-%nonassoc TK_GTE
-%nonassoc TK_LTE
-%nonassoc TK_ET
-%nonassoc '<'
-%nonassoc '>'
+%nonassoc TK_GTE  TK_LTE TK_ET '<' '>'
 
 %left '+' '-'
 %left '*' '/'
@@ -76,12 +77,12 @@ LS: LS S { $$ = $1; $$->push_back($2); }
 S: TK_PRINT '(' E ')'{ $$ = new PrintStatement($3);}
 | TK_ID '=' E {
 	$$ = new AssignStatement($3, 
-							 static_cast<IdExpression*>($1),
-							 &symbolTable,
-							 &symbolTableGen
-							);
-	}
-| IF_STATEMENT 
+							static_cast<IdExpression*>($1),
+							&symbolTable,
+							&symbolTableGen);
+}
+| IF_STATEMENT {$$ = $1;}
+| WHILE_STATEMENT {$$ = $1;}
 ;
 IF_STATEMENT: TK_IF E ':' TK_INDENT LS TK_DEDENT ELSE_OPTIONAL {
 	$$ = new IfStatement($2,*$5,*$7);
@@ -93,6 +94,10 @@ ELSE_OPTIONAL: TK_ELSE ':' TK_INDENT LS TK_DEDENT { $$ = $4; }
 	$$->push_back(new IfStatement($2,*$5,*$7));
 }
 | { $$ = new list<Statement *>; }
+;
+WHILE_STATEMENT: TK_WHILE E ':' TK_INDENT LS TK_DEDENT {
+	$$ = new WhileStatement($2,$5);
+}
 ;
 E: E '+' E { $$ = new AddExpression($1, $3); }
   | E '*' E { $$ = new MultiplyExpression($1, $3); }
@@ -110,19 +115,7 @@ E: E '+' E { $$ = new AddExpression($1, $3); }
 
 %%
 
-int main()
-{
-	tempCount = 1;
-	line = 1;
-	labelNumber = 1;
-  tabStack.push(0);
-  yyparse();
-  cout << "Execution Start: " << endl;
-  for(auto statement : statements){
-	  statement->execute();
-  }
-  return 0;
-}
+
 
 void yyerror(const char *str)
 {
@@ -130,10 +123,15 @@ void yyerror(const char *str)
 }
 
 string newTemp(){
-	int tempOffset = tempCount * 4;
+	int tempOffset;
 	stringstream ss;
-	ss << "dword[ebp -" << tempOffset << "]";
-	tempCount++;
+	if(freeTemporaries.empty()) {
+		ss << "dword[ebp -" << tempCount * 4 << "]";
+		tempCount++;
+	} else {
+		ss << freeTemporaries.top();
+		freeTemporaries.pop();
+	}
 	return ss.str();
 }
 
@@ -150,4 +148,8 @@ string newLabel(){
 	stringstream ss;
 	ss << "label" << labelNumber++;
 	return ss.str();
+}
+
+void releaseTemp(string temp){
+	freeTemporaries.push(temp);
 }

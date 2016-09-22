@@ -26,7 +26,7 @@ public:
 	void execute() override {
 		//(*symbolTable)[id->getKey()] = e;
 		
-		cout << e->generateCode(); // Generate code test
+		//cout << e->generateCode(); // Generate code test
 	}
 	
 	string generateCode() override;

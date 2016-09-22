@@ -6,6 +6,7 @@
 #include <sstream>
 using namespace std;
 extern string newTemp();
+extern void releaseTemp(string temp);
 class LessOrEqualToExpression: public Expression {
 private:
 	Expression *lValue, *rValue;
@@ -27,6 +28,9 @@ public:
 		<< "cmp eax, " << rValue->getLocation() << endl
 		<< "setle al" << endl
 		<< "movzx " << this->getLocation() << ", al" << endl;
+		
+		releaseTemp(lValue->getLocation());
+		releaseTemp(rValue->getLocation());
 		return ss.str();
 	}
 	
@@ -37,6 +41,5 @@ public:
 		return this->location;
 	}
 };
-
 
 #endif //LESS_OR_EQUAL_TO_EXPRESSION_H
