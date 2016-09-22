@@ -2,3 +2,9 @@ bin/
 gen/
 build/
 .kateproject.d/
+CMakeFiles/
+.gitignore~
+src/lexer.cpp
+src/parser.cpp
+src/parser.hpp
+

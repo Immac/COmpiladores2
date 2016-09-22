@@ -15,7 +15,7 @@ using namespace std;
 #include "id-expression.h"
 #include "assign-statement.h"
 #include "print-statement.h"
-#include "tokens.h"
+#include "parser.hpp"
 
 extern map<string,Expression *> symbolTable;
 extern map<string,string> symbolTableGen;
