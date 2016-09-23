@@ -6,6 +6,6 @@ BISON_TARGET(expr_parser src/expr.y ${CMAKE_CURRENT_BINARY_DIR}/src/parser.cpp [
 FLEX_TARGET(expr_lexer src/expr.l  ${CMAKE_CURRENT_BINARY_DIR}/src/lexer.cpp)
 ADD_FLEX_BISON_DEPENDENCY(expr_lexer expr_parser)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-include_directories(src gen ${CMAKE_CURRENT_BINARY_DIR})
 file(GLOB SOURCES "src/*.cpp")
+include_directories(include ${CMAKE_CURRENT_BINARY_DIR})
 add_executable(bin/expr ${SOURCES}  ${BISON_expr_parser_OUTPUTS} ${FLEX_expr_lexer_OUTPUTS})
