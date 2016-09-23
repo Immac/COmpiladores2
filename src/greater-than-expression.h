@@ -11,9 +11,8 @@ public:
 	: lValue(lValue), rValue(rValue)
 	{}
 	
-	int evaluate() override {
-		return lValue->evaluate() > rValue->evaluate();
-	}
+	string generateCode() override;
+	string getLocation() override;
 };
 
 
