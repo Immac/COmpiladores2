@@ -5,7 +5,7 @@
 #include <map>
 #include <string>
 using namespace std;
-extern string resolveId(string id);
+
 class IdExpression: public Expression {
 private:
 	string key;
@@ -18,21 +18,12 @@ public:
 				)
 	: key(key),symbolTable(symbolTable),symbolTableGen(symbolTableGen)
 	{}
-	int evaluate() override {
-		return symbolTable->at(key)->evaluate();
-	}
 	
-	string getKey(){
-		return key;
-	}
+	string getKey(){return key;}
 	
-	string generateCode() {
-		return "";
-	}
+	string generateCode() override;
 	
-	string getLocation() {
-		return resolveId(this->key);
-	}
+	string getLocation() override;
 };
 
 

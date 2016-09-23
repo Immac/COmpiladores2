@@ -20,26 +20,9 @@ public:
 		return lValue->evaluate() <= rValue->evaluate();
 	}
 	
-	string generateCode() override {
-		stringstream ss;
-		ss  << lValue->generateCode()
-		<< rValue->generateCode()
-		<< "mov eax," << lValue->getLocation() << endl
-		<< "cmp eax, " << rValue->getLocation() << endl
-		<< "setle al" << endl
-		<< "movzx " << this->getLocation() << ", al" << endl;
-		
-		releaseTemp(lValue->getLocation());
-		releaseTemp(rValue->getLocation());
-		return ss.str();
-	}
+	string generateCode() override;
 	
-	string getLocation() override {
-		if( this->location.empty() ) {
-			this->location = newTemp();
-		}
-		return this->location;
-	}
+	string getLocation() override;
 };
 
 #endif //LESS_OR_EQUAL_TO_EXPRESSION_H

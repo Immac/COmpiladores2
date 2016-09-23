@@ -10,10 +10,9 @@ public:
 	LessThanExpression(Expression *lValue,Expression *rValue)
 	: lValue(lValue), rValue(rValue)
 	{}
+	string generateCode() override;
 	
-	int evaluate() override {
-		return lValue->evaluate() < rValue->evaluate();
-	}
+	string getLocation() override;
 };
 
 
