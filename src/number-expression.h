@@ -11,15 +11,8 @@ public:
 	: value(value)
 	{}
 	
-	int evaluate() override { 
-		return value; 
-	}
-	string generateCode() override {
-		return "";
-	}
-	string getLocation() override {
-		return to_string(this->value);
-	}
+	string generateCode() override;
+	string getLocation() override;
 };
 
 
