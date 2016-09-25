@@ -5,6 +5,7 @@
 #include <list>
 #include <vector>
 #include <stack>
+#include "left-shift-expression.h"
 #include "boolean-literal.h"
 #include "while-statement.h"
 #include "greater-or-equal-to-expression.h"
@@ -111,8 +112,8 @@ E: E '+' E { $$ = new AddExpression($1, $3); }
   | E TK_LTE E { $$ = new LessOrEqualToExpression($1, $3); }
   | E TK_GTE E { $$ = new GreaterOrEqualToExpression($1, $3); }
   | E TK_ET E { $$ = new EqualToExpression($1, $3); }
-  | E TK_LBS E { $$ = new LeftBitShiftExpression($1,$2); }
-  | E TK_RBS E { $$ = new RightBitShiftExpression($1,$2); }
+  | E TK_LBS E { $$ = new LeftShiftExpression($1,$3); }
+  | E TK_RBS E { $$ = new RightShiftExpression($1,$3); }
   | '(' E ')' { $$ = $2; }
   | TK_NUM { $$ = $1; }
   | TK_ID { $$ = $1 ;}

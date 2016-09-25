@@ -6,8 +6,7 @@
 #include <sstream>
 using namespace std;
 
-extern string newTemp();
-extern void releaseTemp(string temp);
+
 class AddExpression: public Expression {
 private:
 	Expression *e1,*e2;

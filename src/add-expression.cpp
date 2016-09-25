@@ -3,6 +3,8 @@
 #include <iostream>
 #include <string>
 using namespace std;
+extern string newTemp();
+extern void releaseTemp(string temp);
 string AddExpression::generateCode(){
 	stringstream ss;
 	ss << e1->generateCode() << endl
