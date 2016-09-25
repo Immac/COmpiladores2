@@ -5,6 +5,8 @@
 #include <list>
 #include <vector>
 #include <stack>
+#include "and-expression.h"
+#include "or-expression.h"
 #include "left-shift-expression.h"
 #include "right-shift-expression.h"
 #include "boolean-literal.h"
@@ -115,6 +117,7 @@ E: E '+' E { $$ = new AddExpression($1, $3); }
   | E TK_ET E { $$ = new EqualToExpression($1, $3); }
   | E TK_LBS E { $$ = new LeftShiftExpression($1,$3); }
   | E TK_RBS E { $$ = new RightShiftExpression($1,$3); }
+  | E TK_AND E { $$ = new AndExpression($1,$3); }
   | '(' E ')' { $$ = $2; }
   | TK_NUM { $$ = $1; }
   | TK_ID { $$ = $1 ;}
