@@ -5,6 +5,7 @@
 #include <list>
 #include <vector>
 #include <stack>
+#include "boolean-literal.h"
 #include "while-statement.h"
 #include "greater-or-equal-to-expression.h"
 #include "greater-than-expression.h"
@@ -46,12 +47,14 @@ int labelNumber;
 
 %token <expression_t> TK_NUM
 %token <expression_t> TK_ID
+%token <expression_t> TK_TRUE
+%token <expression_t> TK_FALSE
 %token <statement_t> TK_IF
 %token <statement_t> TK_ELSE
 %token <statement_t> TK_PRINT
 %token <statement_t> TK_ELIF
 %token <statement_t> TK_WHILE
-
+%token TK_CLASS
 %token TK_INDENT
 %token TK_DEDENT
 %type <expression_t> E
@@ -61,7 +64,7 @@ int labelNumber;
 %type <statement_t> WHILE_STATEMENT
 %type <statement_list_t> ELSE_OPTIONAL
 
-%nonassoc TK_GTE  TK_LTE TK_ET '<' '>'
+%nonassoc TK_GTE  TK_LTE TK_ET '<' '>' TK_LBS TK_RBS TK_OR TK_NOT TK_AND
 
 %left '+' '-'
 %left '*' '/'
@@ -108,9 +111,13 @@ E: E '+' E { $$ = new AddExpression($1, $3); }
   | E TK_LTE E { $$ = new LessOrEqualToExpression($1, $3); }
   | E TK_GTE E { $$ = new GreaterOrEqualToExpression($1, $3); }
   | E TK_ET E { $$ = new EqualToExpression($1, $3); }
+  | E TK_LBS E { $$ = new LeftBitShiftExpression($1,$2); }
+  | E TK_RBS E { $$ = new RightBitShiftExpression($1,$2); }
   | '(' E ')' { $$ = $2; }
   | TK_NUM { $$ = $1; }
   | TK_ID { $$ = $1 ;}
+  | TK_TRUE { $$ = $1;}
+  | TK_FALSE {$$ = $1;}
 ;
 
 %%

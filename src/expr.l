@@ -16,6 +16,7 @@ using namespace std;
 #include "assign-statement.h"
 #include "print-statement.h"
 #include "parser.hpp"
+#include "boolean-literal.h"
 
 extern map<string,Expression *> symbolTable;
 extern map<string,string> symbolTableGen;
@@ -200,11 +201,23 @@ ID [a-zA-Z][_a-zA-Z0-9]*|[_]+[a-zA-Z0-9][_a-zA-Z0-9]*
 	}
 }
 
+class { cout << "class" ; return TK_CLASS; }
 print { cout << "print" ; return TK_PRINT; }
 if { return TK_IF; }
 else { cout << "else" << endl; return TK_ELSE; }
 elif { cout << "elif" << endl; return TK_ELIF; }
 while { cout << "while" << endl; return TK_WHILE; }
+and { return TK_AND; }
+or { return TK_OR;}
+not {return TK_NOT;}
+true {
+	yylval.expression_t = new BooleanLiteral(true);
+	return TK_TRUE;
+}
+false {
+	yylval.expression_t = new BooleanLiteral(false);
+	return TK_FALSE;
+}
 {ID} { 
 	cout << "TK_ID" << endl;
 	string key(yytext);
@@ -213,10 +226,11 @@ while { cout << "while" << endl; return TK_WHILE; }
 	return TK_ID;
 }
 
-
 ">=" { return TK_GTE;}
 "<=" { return TK_LTE;}
 "==" { return TK_ET;}
+"<<" { return TK_LBS;}
+">>" { return TK_RBS;}
 "<" { return '<';}
 ">" { return '>';}
 "+" { return '+'; }
