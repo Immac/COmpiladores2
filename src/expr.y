@@ -6,6 +6,7 @@
 #include <vector>
 #include <stack>
 #include "left-shift-expression.h"
+#include "right-shift-expression.h"
 #include "boolean-literal.h"
 #include "while-statement.h"
 #include "greater-or-equal-to-expression.h"
