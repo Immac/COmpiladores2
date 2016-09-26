@@ -1,5 +1,8 @@
 #include "less-or-equal-to-expression.h"
-
+#include <sstream>
+using namespace std;
+extern string newTemp();
+extern void releaseTemp(string temp);
 string LessOrEqualToExpression::generateCode() {
 	stringstream ss;
 	ss  << lValue->generateCode()

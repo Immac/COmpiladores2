@@ -8,7 +8,9 @@
 #include <stack>
 
 using namespace std;
-
+#include "class-node.h"
+#include "method-node.h"
+#include "argument.h"
 #include "add-expression.h"
 #include "multiply-expression.h"
 #include "number-expression.h"
@@ -210,6 +212,7 @@ while { cout << "while" << endl; return TK_WHILE; }
 and { return TK_AND; }
 or { return TK_OR;}
 not {return TK_NOT;}
+def {return TK_DEF;}
 true {
 	yylval.expression_t = new BooleanLiteral(true);
 	return TK_TRUE;
