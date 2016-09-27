@@ -3,10 +3,8 @@
 
 #include "expression.h"
 #include <string>
-#include <sstream>
 using namespace std;
-extern string newTemp();
-extern void releaseTemp(string temp);
+
 class LessOrEqualToExpression: public Expression {
 private:
 	Expression *lValue, *rValue;
