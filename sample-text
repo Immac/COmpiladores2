@@ -6,3 +6,10 @@ y = 0
 while y < 10:
     x = 1 + 2 + (3/4) * 5
     y = y + 1
+t = 10
+while t > 0:
+    x = 1 + 2 + (3/4) * 5
+    y = y + 1
+    t = t - 1
+while true:
+    y = y + 1
